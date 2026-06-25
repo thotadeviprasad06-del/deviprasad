@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Srinivasa Heart Centre | Clinic Portal</title>
+<title>Devi Prasad Heart Centre | Clinic Portal</title>
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1204,16 +1202,217 @@ tr:hover {
     height: 250px;
     width: 100%;
 }
+
+/* ========== AUTH OVERLAY STYLES ========== */
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    animation: authFadeIn 0.3s ease;
+}
+.auth-overlay.hidden {
+    display: none;
+}
+@keyframes authFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.auth-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    max-width: 420px;
+    width: 100%;
+    padding: 34px 30px;
+    box-shadow: var(--shadow-lg);
+    animation: authSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes authSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.auth-card h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+}
+.auth-card .sub {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+.auth-card .form-group {
+    margin-bottom: 16px;
+}
+.auth-card label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 4px;
+}
+.auth-card input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg-page);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: var(--transition);
+}
+.auth-card input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(6,182,212,0.15);
+    outline: none;
+}
+.auth-card .btn-auth {
+    width: 100%;
+    padding: 13px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 6px;
+}
+.auth-card .btn-auth:hover {
+    background: var(--primary-hover);
+}
+.auth-card .toggle-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.auth-card .toggle-link span {
+    color: var(--primary);
+    font-weight: 700;
+    cursor: pointer;
+}
+.auth-card .toggle-link span:hover {
+    text-decoration: underline;
+}
+.auth-error {
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: none;
+}
+.auth-error.show {
+    display: block;
+}
+.auth-success {
+    background: var(--success-light);
+    color: var(--success);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: none;
+}
+.auth-success.show {
+    display: block;
+}
+
+/* Logout button in sidebar */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin: 8px 12px 12px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    color: #f87171;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+    width: calc(100% - 24px);
+}
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--accent);
+}
+.logout-btn svg {
+    width: 18px;
+    height: 18px;
+}
 </style>
 </head>
 <body>
+
+<!-- ========== AUTH OVERLAY ========== -->
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+        <h2>❤️ Devi Prasad Heart</h2>
+        <div class="sub">Consultant Cardiologist Portal</div>
+        <div class="auth-error" id="authError"></div>
+        <div class="auth-success" id="authSuccess"></div>
+        
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-auth">Login</button>
+            <div class="toggle-link">Don't have an account? <span onclick="showSignup()">Create one</span></div>
+        </form>
+        
+        <!-- Signup Form -->
+        <form id="signupForm" style="display:none;">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="signupName" placeholder="Dr. Name" required>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="signupUsername" placeholder="Choose username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn-auth">Create Account</button>
+            <div class="toggle-link">Already have an account? <span onclick="showLogin()">Login</span></div>
+        </form>
+    </div>
+</div>
+
 <!-- SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
         <div class="sidebar-logo">❤️</div>
         <div class="brand-details">
-            <h2>Srinivasa Heart</h2>
-            <p>Dr. Srinivas Ramaka</p>
+            <h2>Devi Prasad Heart</h2>
+            <p>Dr. Devi Prasad</p>
         </div>
     </div>
     
@@ -1268,19 +1467,26 @@ tr:hover {
         </li>
     </ul>
     
+    <!-- Logout Button -->
+    <button class="logout-btn" onclick="logoutUser()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+    </button>
+    
     <div class="sidebar-footer">
         <div>Logged in as:</div>
-        <strong>Dr. Srinivas Ramaka</strong>
+        <strong id="sidebarUsername">Dr. Devi Prasad</strong>
         <div style="font-size: 9px; opacity: 0.7; margin-top: 5px;">MD., DM. (Cardiology)</div>
     </div>
 </div>
+
 <!-- MAIN CONTENT WRAPPER -->
-<div class="content">
+<div class="content" id="mainContent">
     
     <!-- TOP HEADER -->
     <div class="top-header">
         <div class="header-meta">
-            <h1 id="page-title-display">Srinivasa Heart Centre</h1>
+            <h1 id="page-title-display">Devi Prasad Heart Centre</h1>
             <p id="page-subtitle-display">Consultant Cardiologist Diagnostic Dashboard</p>
         </div>
         
@@ -1295,8 +1501,8 @@ tr:hover {
             </button>
             
             <div class="dr-badge">
-                <div class="dr-avatar">SR</div>
-                <div class="dr-name">Dr. Srinivas Ramaka</div>
+                <div class="dr-avatar">DP</div>
+                <div class="dr-name" id="headerUsername">Dr. Devi Prasad</div>
             </div>
         </div>
     </div>
@@ -1867,7 +2073,7 @@ tr:hover {
                 <div class="card-header">
                     <div class="card-title">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        Srinivasa Patient Register
+                        Devi Prasad Patient Register
                     </div>
                     <span class="badge badge-green" id="directory-total-badge">0 PATIENTS</span>
                 </div>
@@ -1966,7 +2172,7 @@ tr:hover {
                         <h3 class="card-title" style="color: white;">🕒 Consultation Hours & Info</h3>
                     </div>
                     <div style="font-size: 13px; line-height: 1.6; display: flex; flex-direction: column; gap: 15px;">
-                        <p>Welcome to <strong>Srinivasa Heart Centre</strong> diagnostic portal. Below are the consultation slots available for cardiological examination:</p>
+                        <p>Welcome to <strong>Devi Prasad Heart Centre</strong> diagnostic portal. Below are the consultation slots available for cardiological examination:</p>
                         
                         <div class="form-section" style="background: rgba(255, 255, 255, 0.03); border-color: rgba(255,255,255,0.08); padding: 15px;">
                             <h4 style="color: var(--primary); margin-bottom: 8px;">Weekly Clinic Schedule</h4>
@@ -2177,18 +2383,18 @@ tr:hover {
                         <div class="email-preview-header">
                             <div style="width:34px; height:34px; border-radius:50%; background-color:#ecfeff; display:flex; align-items:center; justify-content:center; color:#06b6d4; font-weight:700;">❤️</div>
                             <div>
-                                <h4 style="margin:0; font-family:'Outfit', sans-serif;">Srinivasa Heart Centre</h4>
-                                <small style="color:#64748b;">Dr. Srinivas Ramaka, MD, DM.</small>
+                                <h4 style="margin:0; font-family:'Outfit', sans-serif;">Devi Prasad Heart Centre</h4>
+                                <small style="color:#64748b;">Dr. Devi Prasad, MD, DM.</small>
                             </div>
                         </div>
                         <div style="font-size: 12px; color: #475569; border-bottom: 1px solid #f1f5f9; padding-bottom:10px;">
-                            <strong>Subject:</strong> <span id="preview-subj">Appointment Confirmation - Srinivasa Heart Centre</span>
+                            <strong>Subject:</strong> <span id="preview-subj">Appointment Confirmation - Devi Prasad Heart Centre</span>
                         </div>
                         <div class="email-preview-body" id="preview-body-content">
                             <!-- Body content sync -->
                         </div>
                         <div class="email-preview-footer">
-                            <p>You received this message from Srinivasa Heart Centre (Consultant Cardiologist Diagnostic Portal).</p>
+                            <p>You received this message from Devi Prasad Heart Centre (Consultant Cardiologist Diagnostic Portal).</p>
                             <p style="margin-top:5px;">H.No. 1-8-50, Warangal, Telangana, India.</p>
                         </div>
                     </div>
@@ -2308,6 +2514,7 @@ tr:hover {
         
     </div>
 </div>
+
 <!-- PATIENT CLINICAL HISTORY DETAILED VIEW MODAL -->
 <div class="modal-overlay" id="patient-details-modal">
     <div class="modal-content">
@@ -2326,10 +2533,153 @@ tr:hover {
         </div>
     </div>
 </div>
+
 <!-- TOAST ALERT SYSTEM -->
 <div class="toast-container" id="toast-alerts-box"></div>
-<!-- APPLICATION JAVASCRIPT STATE CONTROLLER -->
+
 <script>
+// ===================================================================
+// AUTHENTICATION SYSTEM
+// ===================================================================
+
+// User database stored in localStorage
+let DB_USERS = JSON.parse(localStorage.getItem("DB_USERS")) || [];
+
+// Default admin user if no users exist
+if (DB_USERS.length === 0) {
+    DB_USERS.push({
+        username: "admin",
+        password: "admin123",
+        fullName: "Dr. Devi Prasad"
+    });
+    localStorage.setItem("DB_USERS", JSON.stringify(DB_USERS));
+}
+
+let currentUser = null;
+
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('authError').className = 'auth-error';
+    document.getElementById('authSuccess').className = 'auth-success';
+    document.getElementById('authError').textContent = '';
+    document.getElementById('authSuccess').textContent = '';
+}
+
+function showSignup() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('signupForm').style.display = 'block';
+    document.getElementById('authError').className = 'auth-error';
+    document.getElementById('authSuccess').className = 'auth-success';
+    document.getElementById('authError').textContent = '';
+    document.getElementById('authSuccess').textContent = '';
+}
+
+// Login handler
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const errorEl = document.getElementById('authError');
+    const successEl = document.getElementById('authSuccess');
+    
+    errorEl.className = 'auth-error';
+    successEl.className = 'auth-success';
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    
+    if (!username || !password) {
+        errorEl.textContent = 'Please enter both username and password.';
+        errorEl.className = 'auth-error show';
+        return;
+    }
+    
+    const user = DB_USERS.find(u => u.username === username && u.password === password);
+    if (user) {
+        currentUser = user;
+        successEl.textContent = 'Login successful! Redirecting...';
+        successEl.className = 'auth-success show';
+        setTimeout(() => {
+            document.getElementById('authOverlay').classList.add('hidden');
+            document.getElementById('sidebarUsername').textContent = user.fullName;
+            document.getElementById('headerUsername').textContent = user.fullName;
+            showToast(`Welcome back, ${user.fullName}!`, 'success');
+            renderDashboard();
+        }, 500);
+    } else {
+        errorEl.textContent = 'Invalid username or password. Please try again.';
+        errorEl.className = 'auth-error show';
+    }
+});
+
+// Signup handler
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fullName = document.getElementById('signupName').value.trim();
+    const username = document.getElementById('signupUsername').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+    const errorEl = document.getElementById('authError');
+    const successEl = document.getElementById('authSuccess');
+    
+    errorEl.className = 'auth-error';
+    successEl.className = 'auth-success';
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    
+    if (!fullName || !username || !password) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.className = 'auth-error show';
+        return;
+    }
+    
+    if (password.length < 6) {
+        errorEl.textContent = 'Password must be at least 6 characters long.';
+        errorEl.className = 'auth-error show';
+        return;
+    }
+    
+    // Check if username already exists
+    if (DB_USERS.find(u => u.username === username)) {
+        errorEl.textContent = 'Username already exists. Please choose another one.';
+        errorEl.className = 'auth-error show';
+        return;
+    }
+    
+    // Create new user
+    const newUser = { username, password, fullName };
+    DB_USERS.push(newUser);
+    localStorage.setItem("DB_USERS", JSON.stringify(DB_USERS));
+    
+    successEl.textContent = 'Account created successfully! You can now login.';
+    successEl.className = 'auth-success show';
+    
+    // Clear signup form
+    document.getElementById('signupName').value = '';
+    document.getElementById('signupUsername').value = '';
+    document.getElementById('signupPassword').value = '';
+    
+    // Switch to login after 1.5 seconds
+    setTimeout(() => {
+        showLogin();
+        successEl.className = 'auth-success';
+        successEl.textContent = '';
+    }, 1500);
+});
+
+// Logout function
+function logoutUser() {
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        document.getElementById('authOverlay').classList.remove('hidden');
+        showLogin();
+        showToast('You have been logged out.', 'info');
+    }
+}
+
+// ===================================================================
+// CLINIC PORTAL APPLICATION
+// ===================================================================
+
 // Mock Clinic Databases & Local Storage initialization
 const defaultPatients = [
     {
@@ -2459,7 +2809,7 @@ const defaultAppointments = [
     {
         id: "AP-101",
         patientId: "PT-708",
-        date: new Date().toISOString().split('T')[0], // Today
+        date: new Date().toISOString().split('T')[0],
         time: "09:30 AM",
         consultType: "Routine",
         notes: "Cardiology consultation and review of reports",
@@ -2468,7 +2818,7 @@ const defaultAppointments = [
     {
         id: "AP-102",
         patientId: "PT-205",
-        date: new Date().toISOString().split('T')[0], // Today
+        date: new Date().toISOString().split('T')[0],
         time: "11:00 AM",
         consultType: "Routine",
         notes: "Palpitation review & ECG evaluation",
@@ -2493,14 +2843,17 @@ const defaultInvoices = [
         status: "Pending"
     }
 ];
+
 // Load databases
 let DB_PATIENTS = JSON.parse(localStorage.getItem("DB_PATIENTS")) || defaultPatients;
 let DB_APPOINTMENTS = JSON.parse(localStorage.getItem("DB_APPOINTMENTS")) || defaultAppointments;
 let DB_INVOICES = JSON.parse(localStorage.getItem("DB_INVOICES")) || defaultInvoices;
+
 // Save helper functions
 function savePatients() { localStorage.setItem("DB_PATIENTS", JSON.stringify(DB_PATIENTS)); }
 function saveAppointments() { localStorage.setItem("DB_APPOINTMENTS", JSON.stringify(DB_APPOINTMENTS)); }
 function saveInvoices() { localStorage.setItem("DB_INVOICES", JSON.stringify(DB_INVOICES)); }
+
 // Selected items
 let currentWizardStep = 1;
 let uploadedFilesStore = {
@@ -2515,6 +2868,7 @@ let registeredPhotoData = null;
 let currentApptFilter = "today";
 let currentPatientFilter = "all";
 let dashboardChartInstance = null;
+
 // Clock tick
 function initClock() {
     function tick() {
@@ -2533,6 +2887,7 @@ function initClock() {
     setInterval(tick, 1000);
     tick();
 }
+
 // Toast System
 function showToast(message, type = "success") {
     const box = document.getElementById("toast-alerts-box");
@@ -2547,37 +2902,38 @@ function showToast(message, type = "success") {
     toast.innerHTML = `<div>${icon}</div><div>${message}</div>`;
     box.appendChild(toast);
     
-    // Auto remove
     setTimeout(() => {
         toast.style.animation = "fadeOut 0.3s ease forwards";
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
+
 // Navigation between views
 function switchView(viewId) {
-    // Deactivate all sidebar active links
+    if (!currentUser) {
+        showToast('Please login first.', 'error');
+        return;
+    }
+    
     document.querySelectorAll(".sidebar-item").forEach(item => {
         item.classList.remove("active");
     });
     
-    // Deactivate all page containers
     document.querySelectorAll(".page-view").forEach(page => {
         page.classList.remove("active-view");
     });
     
-    // Activate target
     const targetMenu = document.getElementById(`menu-${viewId}`);
     if (targetMenu) targetMenu.classList.add("active");
     
     const targetPage = document.getElementById(`view-${viewId}`);
     if (targetPage) targetPage.classList.add("active-view");
     
-    // Update top header title description
     const titleDisp = document.getElementById("page-title-display");
     const subDisp = document.getElementById("page-subtitle-display");
     
     if (viewId === "home") {
-        titleDisp.innerText = "Srinivasa Heart Centre";
+        titleDisp.innerText = "Devi Prasad Heart Centre";
         subDisp.innerText = "Consultant Cardiologist Diagnostic Dashboard";
         renderDashboard();
     } else if (viewId === "new-patient") {
@@ -2614,27 +2970,24 @@ function switchView(viewId) {
         renderBillingLedger();
     }
 }
+
 // ---------------- DASHBOARD LOGIC ----------------
 function renderDashboard() {
-    // Update stats
     document.getElementById("stat-total-patients").innerText = DB_PATIENTS.length;
     
     const todayStr = new Date().toISOString().split('T')[0];
     const todayAppts = DB_APPOINTMENTS.filter(a => a.date === todayStr);
     document.getElementById("stat-today-appointments").innerText = todayAppts.length;
     
-    // Pending reports
     let pendingCount = 0;
     DB_PATIENTS.forEach(p => {
         if (!p.conclusion || p.conclusion.length < 5) pendingCount++;
     });
     document.getElementById("stat-pending-reports").innerText = pendingCount;
     
-    // Revenue sum
     const revSum = DB_INVOICES.reduce((acc, inv) => acc + inv.amount, 0);
     document.getElementById("stat-collected-revenue").innerText = `₹${revSum.toLocaleString('en-IN')}`;
     
-    // Recent activity list
     const actContainer = document.getElementById("dashboard-recent-activity");
     actContainer.innerHTML = "";
     
@@ -2668,14 +3021,12 @@ function renderDashboard() {
         });
     }
     
-    // Draw dashboard Chart
     initDashboardChart();
 }
+
 function initDashboardChart() {
     const ctx = document.getElementById('dashboardChart').getContext('2d');
     
-    // Calculate values
-    // Find patient registrations per district/hometown or risk factor distribution
     let dmCount = 0, htnCount = 0, smokeCount = 0, ihdCount = 0;
     DB_PATIENTS.forEach(p => {
         if (p.riskFactors.dm) dmCount++;
@@ -2747,6 +3098,7 @@ function initDashboardChart() {
         }
     });
 }
+
 // ---------------- WIZARD NEW PATIENT REGISTER LOGIC ----------------
 function resetWizard() {
     currentWizardStep = 1;
@@ -2758,28 +3110,24 @@ function resetWizard() {
     document.getElementById("photo-upload-preview").innerText = "📸";
     document.getElementById("photo-upload-preview").style.backgroundImage = "none";
     
-    // Clear reports display list
     document.querySelectorAll(".file-preview-list").forEach(list => list.innerHTML = "");
     
-    // Uncheck styled labels
     document.querySelectorAll(".checkbox-label").forEach(lbl => {
         lbl.classList.remove("checked");
     });
     
     goToStep(1);
 }
+
 function goToStep(stepNum) {
     currentWizardStep = stepNum;
     
-    // Hide all contents
     document.querySelectorAll(".wizard-step-content").forEach(content => {
         content.style.display = "none";
     });
     
-    // Show current
     document.getElementById(`wizard-step-${stepNum}`).style.display = "block";
     
-    // Update steps progress header visual nodes
     const nodes = document.querySelectorAll(".wizard-step-node");
     nodes.forEach((node, index) => {
         const stepIndex = index + 1;
@@ -2792,13 +3140,12 @@ function goToStep(stepNum) {
         }
     });
     
-    // Line width calculation
     const progressPercent = ((stepNum - 1) / (nodes.length - 1)) * 100;
     document.getElementById("wizard-line").style.width = `${progressPercent}%`;
     document.getElementById("wizard-step-indicator").innerText = `STEP ${stepNum} OF ${nodes.length}`;
 }
+
 function nextWizardStep() {
-    // Perform simple validation for step 1
     if (currentWizardStep === 1) {
         const cardNo = document.getElementById("reg-card-number").value.trim();
         const fName = document.getElementById("reg-first-name").value.trim();
@@ -2814,9 +3161,11 @@ function nextWizardStep() {
     
     goToStep(currentWizardStep + 1);
 }
+
 function prevWizardStep() {
     goToStep(currentWizardStep - 1);
 }
+
 function calculateAgeFromDOB() {
     const dobInput = document.getElementById("reg-dob").value;
     if (!dobInput) return;
@@ -2832,6 +3181,7 @@ function calculateAgeFromDOB() {
     
     document.getElementById("reg-age").value = age;
 }
+
 function calculateBMI() {
     const h = parseFloat(document.getElementById("reg-height").value);
     const w = parseFloat(document.getElementById("reg-weight").value);
@@ -2863,6 +3213,7 @@ function calculateBMI() {
         badge.className = "badge badge-red";
     }
 }
+
 // Checkbox labels styling sync
 document.addEventListener("change", function(e) {
     if (e.target && e.target.type === "checkbox") {
@@ -2876,6 +3227,7 @@ document.addEventListener("change", function(e) {
         }
     }
 });
+
 // Image preview upload helper
 function previewPatientPhoto(event) {
     const reader = new FileReader();
@@ -2887,6 +3239,7 @@ function previewPatientPhoto(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 }
+
 // Reports upload collector
 function handleWizardFileUpload(event, category) {
     const file = event.target.files[0];
@@ -2894,7 +3247,6 @@ function handleWizardFileUpload(event, category) {
     
     uploadedFilesStore[category].push(file.name);
     
-    // Add visual preview item
     let listId = "";
     if (category === "Blood Report") listId = "blood-files-list";
     if (category === "ECG Report") listId = "ecg-files-list";
@@ -2916,15 +3268,16 @@ function handleWizardFileUpload(event, category) {
     list.appendChild(item);
     showToast(`Uploaded ${file.name} to ${category} shelf.`, "info");
 }
+
 function removeWizardFile(btn, category, filename) {
     uploadedFilesStore[category] = uploadedFilesStore[category].filter(f => f !== filename);
     btn.closest(".file-preview-item").remove();
 }
+
 // Form Submission logic
 document.getElementById("wizard-patient-form").addEventListener("submit", function(e) {
     e.preventDefault();
     
-    // Generate new Patient Card ID
     const nextId = "PT-" + Math.floor(100 + Math.random() * 900);
     
     const newPatient = {
@@ -2997,7 +3350,6 @@ document.getElementById("wizard-patient-form").addEventListener("submit", functi
         cvsExam: document.getElementById("reg-cvs-exam").value.trim(),
         otherExam: document.getElementById("reg-other-exam").value.trim(),
         
-        // Combined list of file names upload
         files: Object.keys(uploadedFilesStore).reduce((acc, cat) => {
             return acc.concat(uploadedFilesStore[cat]);
         }, []),
@@ -3011,9 +3363,9 @@ document.getElementById("wizard-patient-form").addEventListener("submit", functi
     savePatients();
     showToast(`Patient ${newPatient.firstName} registered successfully with ID ${newPatient.id}!`, "success");
     
-    // Redirect to Old Patient Directory
     switchView("old-patient");
 });
+
 // ---------------- OLD PATIENT DIRECTORY LOGIC ----------------
 function renderPatientDirectory() {
     const listBody = document.getElementById("patient-table-body");
@@ -3021,12 +3373,10 @@ function renderPatientDirectory() {
     
     let filtered = DB_PATIENTS;
     
-    // Apply tab filters
     if (currentPatientFilter === "DM") filtered = filtered.filter(p => p.riskFactors.dm);
     if (currentPatientFilter === "HTN") filtered = filtered.filter(p => p.riskFactors.htn);
     if (currentPatientFilter === "IHD") filtered = filtered.filter(p => p.riskFactors.ihd);
     
-    // Apply search query
     const searchVal = document.getElementById("patient-search").value.toLowerCase().trim();
     if (searchVal) {
         filtered = filtered.filter(p => {
@@ -3038,7 +3388,6 @@ function renderPatientDirectory() {
         });
     }
     
-    // Update badge count
     document.getElementById("directory-total-badge").innerText = `${filtered.length} PATIENTS`;
     
     if (filtered.length === 0) {
@@ -3049,7 +3398,6 @@ function renderPatientDirectory() {
     filtered.forEach(p => {
         const tr = document.createElement("tr");
         
-        // Badges builder
         let riskBadges = "";
         if (p.riskFactors.dm) riskBadges += '<span class="badge badge-blue" style="font-size: 8px; margin-right: 3px;">DM</span>';
         if (p.riskFactors.htn) riskBadges += '<span class="badge badge-red" style="font-size: 8px; margin-right: 3px;">HTN</span>';
@@ -3074,9 +3422,11 @@ function renderPatientDirectory() {
         listBody.appendChild(tr);
     });
 }
+
 function handleSearch() {
     renderPatientDirectory();
 }
+
 function filterPatients(filterType) {
     currentPatientFilter = filterType;
     document.querySelectorAll(".filter-chip").forEach(chip => {
@@ -3091,12 +3441,11 @@ function filterPatients(filterType) {
     document.getElementById(btnId).classList.add("active-chip");
     renderPatientDirectory();
 }
+
 function deletePatientRecord(patientId) {
     if (confirm(`Are you absolutely sure you want to delete patient record ${patientId}? This action is permanent.`)) {
         DB_PATIENTS = DB_PATIENTS.filter(p => p.id !== patientId);
-        // Also delete appointments
         DB_APPOINTMENTS = DB_APPOINTMENTS.filter(a => a.patientId !== patientId);
-        // Also invoices
         DB_INVOICES = DB_INVOICES.filter(i => i.patientId !== patientId);
         
         savePatients();
@@ -3108,8 +3457,10 @@ function deletePatientRecord(patientId) {
         renderDashboard();
     }
 }
+
 // ---------------- CLINICAL CASE FILE DETAILS MODAL ----------------
 let activeViewingPatientId = null;
+
 function viewPatientCaseFile(patientId) {
     const patient = DB_PATIENTS.find(p => p.id === patientId);
     if (!patient) return;
@@ -3235,14 +3586,14 @@ function viewPatientCaseFile(patientId) {
     
     document.getElementById("patient-details-modal").style.display = "flex";
 }
+
 function closeModal() {
     document.getElementById("patient-details-modal").style.display = "none";
 }
+
 function printClinicalFile() {
-    const restoreContent = document.body.innerHTML;
     const printContent = document.getElementById("modal-body-content").innerHTML;
     
-    // Create new windows or clean print environment
     const styleString = `
         <style>
             body { font-family: Arial, sans-serif; padding: 40px; color: #000; }
@@ -3267,21 +3618,20 @@ function printClinicalFile() {
         printWin.close();
     }, 250);
 }
-// Close modal when clicking outside
+
 window.addEventListener("click", function(e) {
     const modal = document.getElementById("patient-details-modal");
     if (e.target === modal) {
         closeModal();
     }
 });
+
 // ---------------- APPOINTMENT BOOKING LOGIC ----------------
 function populatePatientDropdowns() {
-    // dropdowns: book-patient-select, email-patient-select, bill-patient-select
     const bookSel = document.getElementById("book-patient-select");
     const mailSel = document.getElementById("email-patient-select");
     const billSel = document.getElementById("bill-patient-select");
     
-    // Clear
     bookSel.innerHTML = '<option value="">-- Select Patient --</option>';
     mailSel.innerHTML = '<option value="">-- Choose Patient --</option>';
     billSel.innerHTML = '<option value="">-- Choose Patient --</option>';
@@ -3305,6 +3655,7 @@ function populatePatientDropdowns() {
         billSel.appendChild(opt3);
     });
 }
+
 function generateTimeSlots() {
     const slotsContainer = document.getElementById("booking-slots-container");
     slotsContainer.innerHTML = "";
@@ -3315,10 +3666,8 @@ function generateTimeSlots() {
         return;
     }
     
-    // List of hours
     const times = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"];
     
-    // Check which times are already booked for this date
     const bookedTimes = DB_APPOINTMENTS.filter(a => a.date === selectedDate && a.status !== "Cancelled").map(a => a.time);
     
     times.forEach(t => {
@@ -3342,6 +3691,7 @@ function generateTimeSlots() {
         slotsContainer.appendChild(slotBtn);
     });
 }
+
 document.getElementById("appointment-booking-form").addEventListener("submit", function(e) {
     e.preventDefault();
     
@@ -3371,9 +3721,9 @@ document.getElementById("appointment-booking-form").addEventListener("submit", f
     
     showToast(`Appointment booked successfully at ${time} for patient!`, "success");
     
-    // Redirect to Timeline scheduler
     switchView("appointment-view");
 });
+
 // ---------------- CLINICAL SCHEDULER VIEW LOGIC ----------------
 function renderAppointmentsPlanner() {
     const container = document.getElementById("appointment-planner-list");
@@ -3390,7 +3740,6 @@ function renderAppointmentsPlanner() {
         filtered = filtered.filter(a => a.status === "Completed");
     }
     
-    // Sort chronologically by date then time
     filtered.sort((a,b) => {
         if(a.date !== b.date) return a.date.localeCompare(b.date);
         return a.time.localeCompare(b.time);
@@ -3413,7 +3762,6 @@ function renderAppointmentsPlanner() {
         if (a.status === "Cancelled") statusBadgeClass = "badge-red";
         if (a.status === "Checked-In") statusBadgeClass = "badge-yellow";
         
-        // Action buttons builder
         let actionBtnsHtml = "";
         if (a.status === "Scheduled") {
             actionBtnsHtml = `
@@ -3442,6 +3790,7 @@ function renderAppointmentsPlanner() {
         container.appendChild(cardDiv);
     });
 }
+
 function updateApptStatus(apptId, newStatus) {
     const appt = DB_APPOINTMENTS.find(a => a.id === apptId);
     if (!appt) return;
@@ -3453,6 +3802,7 @@ function updateApptStatus(apptId, newStatus) {
     renderAppointmentsPlanner();
     renderDashboard();
 }
+
 function filterAppointments(filterVal) {
     currentApptFilter = filterVal;
     document.querySelectorAll("#appt-filter-today, #appt-filter-upcoming, #appt-filter-completed").forEach(btn => {
@@ -3462,6 +3812,7 @@ function filterAppointments(filterVal) {
     document.getElementById(`appt-filter-${filterVal}`).classList.add("active-chip");
     renderAppointmentsPlanner();
 }
+
 // ---------------- MEDICAL CALCULATORS (STUDY) ----------------
 function runRiskCalculator() {
     const age = parseInt(document.getElementById("calc-age").value);
@@ -3471,16 +3822,13 @@ function runRiskCalculator() {
     const hasDm = document.getElementById("calc-dm").value === "yes";
     const isSmoker = document.getElementById("calc-smoke").value === "yes";
     
-    // Sync slider labels
     document.getElementById("calc-age-val").innerText = age;
     document.getElementById("calc-sbp-val").innerText = sbp;
     document.getElementById("calc-chol-val").innerText = chol;
     document.getElementById("calc-hdl-val").innerText = hdl;
     
-    // Framingham Cardiovascular 10-year Risk Estimate Approximation
     let riskFactor = 0;
     
-    // Simple mock calculation logic
     riskFactor += (age - 20) * 0.15;
     riskFactor += (sbp - 90) * 0.12;
     riskFactor += (chol - 100) * 0.08;
@@ -3514,10 +3862,10 @@ function runRiskCalculator() {
         statusVal.style.color = "var(--accent)";
     }
 }
+
 function calculateTHR() {
     const age = parseInt(document.getElementById("thr-age").value) || 50;
     
-    // Max HR = 220 - age
     const maxHR = 220 - age;
     const lowerZone = Math.round(maxHR * 0.7);
     const upperZone = Math.round(maxHR * 0.85);
@@ -3525,25 +3873,27 @@ function calculateTHR() {
     document.getElementById("thr-max").innerText = `${maxHR} bpm`;
     document.getElementById("thr-zone").innerText = `${lowerZone} - ${upperZone} bpm`;
 }
+
 // ---------------- EMAIL DISPATCH PORTAL ----------------
 const emailTemplates = {
     confirmation: {
-        subject: "Appointment Confirmation - Srinivasa Heart Centre",
-        body: "Dear [NAME],\n\nThis is to confirm your cardiological consultation appointment scheduled at Srinivasa Heart Centre.\n\nDate: [DATE]\nTime: [TIME]\nConsultant: Dr. Srinivas Ramaka, MD, DM. (Consultant Cardiologist)\n\nPlease arrive 10 minutes prior to your scheduled slot. If you have done any previous ECG, 2D ECHO, or lipid panels reports, remember to bring them.\n\nRegards,\nClinic Desk\nSrinivasa Heart Centre"
+        subject: "Appointment Confirmation - Devi Prasad Heart Centre",
+        body: "Dear [NAME],\n\nThis is to confirm your cardiological consultation appointment scheduled at Devi Prasad Heart Centre.\n\nDate: [DATE]\nTime: [TIME]\nConsultant: Dr. Devi Prasad, MD, DM. (Consultant Cardiologist)\n\nPlease arrive 10 minutes prior to your scheduled slot. If you have done any previous ECG, 2D ECHO, or lipid panels reports, remember to bring them.\n\nRegards,\nClinic Desk\nDevi Prasad Heart Centre"
     },
     reports: {
         subject: "Medical Investigation Reports Diagnostic Ready",
-        body: "Dear [NAME],\n\nWe are pleased to inform you that your diagnostic reports (ECG/2D ECHO) are ready for review.\n\nDr. Srinivas Ramaka has analyzed your details. Please find the clinical conclusion outline in your card folder.\n\nFinal Recommendation: [CONCLUSION]\n\nPlease consult the clinic for detailed prescription advice.\n\nRegards,\nSrinivasa Heart Centre"
+        body: "Dear [NAME],\n\nWe are pleased to inform you that your diagnostic reports (ECG/2D ECHO) are ready for review.\n\nDr. Devi Prasad has analyzed your details. Please find the clinical conclusion outline in your card folder.\n\nFinal Recommendation: [CONCLUSION]\n\nPlease consult the clinic for detailed prescription advice.\n\nRegards,\nDevi Prasad Heart Centre"
     },
     guidelines: {
         subject: "Cardiorespiratory Cardiac Health Recommendations",
-        body: "Dear [NAME],\n\nTo promote cardiac well-being, Dr. Srinivas Ramaka suggests the following cardiovascular lifestyle guidelines:\n\n1. Maintain a low-sodium, high-fiber dietary routine.\n2. Engage in moderate physical exercise (walking 30 minutes daily).\n3. Monitor blood pressure periodically and record values.\n4. Ensure compliance with prescribed cardiac medicines.\n\nIf you experience chest pain, breathlessness, or pedal swelling, contact our emergency line immediately.\n\nBest health,\nDr. Srinivas Ramaka\nSrinivasa Heart Centre"
+        body: "Dear [NAME],\n\nTo promote cardiac well-being, Dr. Devi Prasad suggests the following cardiovascular lifestyle guidelines:\n\n1. Maintain a low-sodium, high-fiber dietary routine.\n2. Engage in moderate physical exercise (walking 30 minutes daily).\n3. Monitor blood pressure periodically and record values.\n4. Ensure compliance with prescribed cardiac medicines.\n\nIf you experience chest pain, breathlessness, or pedal swelling, contact our emergency line immediately.\n\nBest health,\nDr. Devi Prasad\nDevi Prasad Heart Centre"
     },
     custom: {
-        subject: "Clinic Notification - Srinivasa Heart Centre",
-        body: "Dear [NAME],\n\n\n\nRegards,\nSrinivasa Heart Centre"
+        subject: "Clinic Notification - Devi Prasad Heart Centre",
+        body: "Dear [NAME],\n\n\n\nRegards,\nDevi Prasad Heart Centre"
     }
 };
+
 function autoFillEmailRecipient() {
     const patientId = document.getElementById("email-patient-select").value;
     if (!patientId) {
@@ -3556,11 +3906,12 @@ function autoFillEmailRecipient() {
         applyEmailTemplate();
     }
 }
+
 function applyEmailTemplate() {
     const templateType = document.getElementById("email-template-select").value;
     const patientId = document.getElementById("email-patient-select").value;
     
-    let patient = DB_PATIENTS[0]; // Fallback mock
+    let patient = DB_PATIENTS[0];
     if (patientId) {
         patient = DB_PATIENTS.find(p => p.id === patientId);
     }
@@ -3573,7 +3924,6 @@ function applyEmailTemplate() {
         const fullName = `${patient.firstName} ${patient.lastName}`;
         body = body.replace("[NAME]", fullName);
         
-        // Find appointment details
         const appt = DB_APPOINTMENTS.find(a => a.patientId === patient.id);
         const apptDate = appt ? appt.date : new Date().toISOString().split('T')[0];
         const apptTime = appt ? appt.time : "09:30 AM";
@@ -3588,29 +3938,28 @@ function applyEmailTemplate() {
     
     syncEmailPreview();
 }
+
 function syncEmailPreview() {
     const subj = document.getElementById("email-subject").value;
     const body = document.getElementById("email-body").value;
     
     document.getElementById("preview-subj").innerText = subj;
-    
-    // Replace newlines with breaks
     document.getElementById("preview-body-content").innerHTML = body.replace(/\n/g, "<br>");
 }
+
 document.getElementById("email-compose-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const recipient = document.getElementById("email-to").value;
     
     showToast(`Email dispatched successfully to ${recipient}!`, "success");
     
-    // Reset compose
     document.getElementById("email-compose-form").reset();
     document.getElementById("email-patient-select").value = "";
     applyEmailTemplate();
 });
+
 // ---------------- BILLING & ACCOUNTS LOGIC ----------------
 function renderBillingLedger() {
-    // Update stats
     const totalBilled = DB_INVOICES.reduce((acc, inv) => acc + inv.amount, 0);
     const paidSum = DB_INVOICES.filter(i => i.status === "Paid").reduce((acc, inv) => acc + inv.amount, 0);
     const pendingSum = DB_INVOICES.filter(i => i.status === "Pending").reduce((acc, inv) => acc + inv.amount, 0);
@@ -3619,7 +3968,6 @@ function renderBillingLedger() {
     document.getElementById("billing-stat-paid").innerText = `₹${paidSum.toLocaleString('en-IN')}`;
     document.getElementById("billing-stat-pending").innerText = `₹${pendingSum.toLocaleString('en-IN')}`;
     
-    // Table history
     const ledger = document.getElementById("billing-ledger-body");
     ledger.innerHTML = "";
     
@@ -3651,6 +3999,7 @@ function renderBillingLedger() {
         ledger.appendChild(tr);
     });
 }
+
 function collectPayment(invoiceId) {
     const inv = DB_INVOICES.find(i => i.id === invoiceId);
     if (!inv) return;
@@ -3661,10 +4010,11 @@ function collectPayment(invoiceId) {
     renderBillingLedger();
     renderDashboard();
 }
-// Checkboxes running sum calculation
+
 document.querySelectorAll(".bill-item-chk").forEach(chk => {
     chk.addEventListener("change", calculateRunningInvoiceSum);
 });
+
 function calculateRunningInvoiceSum() {
     let sum = 0;
     document.querySelectorAll(".bill-item-chk").forEach(chk => {
@@ -3674,6 +4024,7 @@ function calculateRunningInvoiceSum() {
     });
     document.getElementById("bill-running-total").innerText = `₹${sum.toLocaleString('en-IN')}`;
 }
+
 document.getElementById("billing-invoice-form").addEventListener("submit", function(e) {
     e.preventDefault();
     
@@ -3714,18 +4065,17 @@ document.getElementById("billing-invoice-form").addEventListener("submit", funct
     
     showToast(`Invoice ${newInvoice.id} generated successfully!`, "success");
     
-    // Reset form
     document.getElementById("billing-invoice-form").reset();
     document.getElementById("bill-patient-select").value = "";
-    // Re-check defaults
     document.querySelectorAll(".bill-item-chk").forEach((c, idx) => {
-        c.checked = (idx === 0); // Check only consultation by default
+        c.checked = (idx === 0);
     });
     calculateRunningInvoiceSum();
     
     renderBillingLedger();
     renderDashboard();
 });
+
 // Theme Toggle
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute("data-theme");
@@ -3733,23 +4083,24 @@ function toggleTheme() {
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("clinic-theme", newTheme);
     
-    // Redraw charts with updated theme colors
     if (document.getElementById("view-home").classList.contains("active-view")) {
         initDashboardChart();
     }
 }
+
 // App Initialization
 window.onload = function() {
-    // Restore theme
     const savedTheme = localStorage.getItem("clinic-theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
     
     initClock();
     populatePatientDropdowns();
     renderDashboard();
-    
-    // Auto sync templates
     applyEmailTemplate();
+    
+    // Show login overlay initially
+    document.getElementById('authOverlay').classList.remove('hidden');
+    showLogin();
 };
 </script>
 </body>
